@@ -43,8 +43,8 @@ class LoRALinear(Module):
 
         # add LoRA matrices
         if r > 0:
-            self.lora_B = Parameter(torch.randn((out_features, r)))
-            self.lora_A = Parameter(torch.zeros(r, in_features))
+            self.lora_B = Parameter(torch.randn((out_features, r), **factory_kwargs))
+            self.lora_A = Parameter(torch.zeros((r, in_features), **factory_kwargs))
             self.scaling = alpha / r
 
         self.reset_parameters()
