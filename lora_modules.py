@@ -4,6 +4,7 @@ from torch import Tensor, nn
 from torch.nn import Module, init
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
+from transformers.models.roberta.modeling_roberta import RobertaSdpaSelfAttention
 
 class LoRALinear(Module):
     """
@@ -80,7 +81,7 @@ class LoRARobertaSelfAttention(nn.Module):
     Compared to the original, the `self.query` and `self.value` layers are replaced by LoRALinear.
     """
     def __init__(self, config, position_embedding_type=None):
-        super().__init__()
+        super().__init__(config)
         if config.hidden_size % config.num_attention_heads != 0 and not hasattr(config, "embedding_size"):
             raise ValueError(
                 f"The hidden size ({config.hidden_size}) is not a multiple of the number of attention "
@@ -120,3 +121,11 @@ class LoRARobertaSelfAttention(nn.Module):
         new_x_shape = x.size()[:-1] + (self.num_attention_heads, self.attention_head_size)
         x = x.view(new_x_shape)
         return x.permute(0, 2, 1, 3)
+
+
+# Define the custom RobertaSdpaSelfAttention class that inherits from custom LoRA classes
+CustomRobertaSdpaSelfAttention = type(
+    'CustomRobertaSdpaSelfAttention',
+    (LoRARobertaSelfAttention, RobertaSdpaSelfAttention),
+    {}
+)
