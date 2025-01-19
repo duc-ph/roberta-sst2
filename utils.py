@@ -32,7 +32,7 @@ def get_loss_and_accuracy(model, dataloader, device, eval_ratio=1.0):
     
     final_accuracy /= len(dataloader)
     final_loss /= len(dataloader)
-    return loss, final_accuracy
+    return final_loss, final_accuracy
 
 class SST2Dataset(Dataset):
     def __init__(self, X, y):
