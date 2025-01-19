@@ -57,7 +57,7 @@ class LoRALinear(Module):
 
         # add init for LoRA matrices
         if self.r > 0:
-            init.kaiming_uniform(self.lora_A, a=math.sqrt(5))
+            init.kaiming_uniform_(self.lora_A, a=math.sqrt(5))
             nn.init.zeros_(self.lora_B)
 
     def forward(self, input: torch.Tensor) -> torch.Tensor:
