@@ -3,21 +3,19 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, Dataset
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-def get_loss_and_accuracy(model, dataloader, device, eval_ratio=1.0):
+def get_loss_and_accuracy(model, dataset, device, eval_ratio=1.0, shuffle=True):
     final_accuracy = 0
     final_loss = 0
-    new_dataloader = DataLoader(
-        dataloader.dataset, 
-        batch_size=dataloader.batch_size, 
-        shuffle=True, # turn this on
-        num_workers=dataloader.num_workers, 
-        drop_last=dataloader.drop_last
+    dataloader = DataLoader(
+        dataset, 
+        batch_size=32, 
+        shuffle=shuffle,
     )
-    num_batch = int(len(new_dataloader) * eval_ratio)
+    num_batch = int(len(dataloader) * eval_ratio)
 
     model.eval()
     with torch.no_grad():
-        for batch_idx, (x, y) in enumerate(new_dataloader):
+        for batch_idx, (x, y) in enumerate(dataloader):
             if batch_idx == num_batch:
                 break
             logits = model(**x).logits
