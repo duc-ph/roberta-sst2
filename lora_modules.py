@@ -125,7 +125,7 @@ class LoRARobertaSelfAttention(nn.Module):
 
 # Define the custom RobertaSdpaSelfAttention class that inherits from custom LoRA classes
 LoRARobertaSdpaSelfAttention = type(
-    'CustomRobertaSdpaSelfAttention',
+    'LoRARobertaSdpaSelfAttention',
     (LoRARobertaSelfAttention, RobertaSdpaSelfAttention),
     {}
 )

@@ -19,9 +19,8 @@ def get_loss_and_accuracy(model, dataset, device, eval_ratio=1.0, shuffle=True):
             if batch_idx == num_batch:
                 break
             logits = model(**x).logits
-            softmax = F.softmax(logits, dim=1)
             loss = F.cross_entropy(logits, y)
-            y_preds = torch.argmax(softmax, dim=1)
+            y_preds = torch.argmax(logits, dim=1)
             y = torch.Tensor([x[1] for x in y]).to(device)
 
             accuracy = (torch.sum(y_preds == y)/len(y)).item()
